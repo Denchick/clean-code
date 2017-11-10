@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using System.Text;
 
 namespace Markdown
 {
@@ -6,11 +9,28 @@ namespace Markdown
 	{
 		public string RenderToHtml(string markdown)
 		{
-			return markdown; //TODO
+		    var result = new StringBuilder();
+		    foreach (var s in markdown.Split('\n'))
+		    {
+		        var parsed = ParseLine();
+		        var rendered = RenderLine(s, parsed);
+		        result.Append(rendered);
+		    }
+		    return result.ToString();
 		}
+
+	    private List<ParsedSubline> ParseLine()
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    private string RenderLine(string s, List<ParsedSubline> parsed)
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 
-	[TestFixture]
+    [TestFixture]
 	public class Md_ShouldRender
 	{
 	}
