@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NUnit.Framework.Constraints;
 
 namespace Markdown.Rules
 {
-    class Header
+    internal class Header : Rule
     {
+        public new string MarkdownTag { get; } = "#";
+        public new string HtmlTag { get; } = "h1";
+        public new bool HaveClosingHtmlTag { get; } = true;
+        public new bool HaveClosingMarkdownTag { get; } = false;
     }
 }
