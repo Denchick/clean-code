@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Markdown
 {
-    class ParsedSubline
+    public class ParsedSubline
     {
-        public int LeftBorder { get; set; }
-        public int RightBorder { get; set; }
-        public Rule Rule { get; set; }
+        public int LeftBorderOfSubline { get; set; }
+        public int RightBorderOfSubline { get; set; }
+        public MarkupRule MarkupRule { get; set; }
     }
 
 }
