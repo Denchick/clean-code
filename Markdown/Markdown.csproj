@@ -52,17 +52,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ParsedSubline.cs" />
     <Compile Include="MarkupRule.cs" />
     <Compile Include="Md.cs" />
+    <Compile Include="Md_ShouldRender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="MarkupRules\Bold.cs" />
     <Compile Include="MarkupRules\Cursive.cs" />
     <Compile Include="MarkupRules\Header.cs" />
-    <Compile Include="StringExtension.cs" />
-    <Compile Include="TextParser.cs" />
     <Compile Include="TextRender.cs" />
-    <Compile Include="ToHtmlTag.cs" />
+    <Compile Include="Utils\ParsedSubline.cs" />
+    <Compile Include="Utils\StringExtension.cs" />
+    <Compile Include="Utils\ToHtmlTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

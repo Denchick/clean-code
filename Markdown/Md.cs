@@ -14,42 +14,27 @@ namespace Markdown
 	{
 		private List<MarkupRule> CurrentMarkupRules { get; }
 			
-		public Md(params MarkupRule[] rules)
+		public Md(IEnumerable<MarkupRule> rules)
 		{
-			CurrentMarkupRules = new List<MarkupRule>();
-			CurrentMarkupRules.AddRange(rules);
+			CurrentMarkupRules = rules
+				.Where(e => e?.MarkdownTag != null)
+				.OrderBy(e => e.MarkdownTag.Length)
+				.ToList();
 		}
 
 		public string RenderToHtml(string markdown)
 		{
 		    var result = new StringBuilder();
-			var parser = new TextParser(CurrentMarkupRules);
 			var render = new TextRender(CurrentMarkupRules);
 		    foreach (var s in markdown.Split('\n'))
 		    {
-		        var parsed = parser.ParseLine(s);
+		        var parsed = CurrentMarkupRules
+			        .SelectMany(e => e.ParseLineWithRule(s));
 		        var rendered = render.RenderLine(s, parsed);
 		        result.Append(rendered);
 		    }
 		    return result.ToString();
 		}
-
-	}
-
-	[TestFixture]
-	public class Md_ShouldRender
-	{
-		
-		[TestCase("", "")]
-		public void CorrectMarkup(string source, string expected)
-		{
-			var md = new Md();
-			
-			var rendered = md.RenderToHtml(source);
-
-			rendered.Should().Be(expected);
-		}
-		
 
 	}
 }
