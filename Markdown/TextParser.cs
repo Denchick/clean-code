@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using FluentAssertions;
 using Markdown.MarkupRules;
 using Markdown.Rules;
@@ -17,18 +18,9 @@ namespace Markdown
 
         public IEnumerable<ParsedSubline> ParseLine(string s)
         {
-            var result = new List<ParsedSubline>();
-            var stack = new Stack<ParsedSubline>();
-            var indexies = GetAllPotentialIndexiesOfMarkup(s);
-
-            foreach (var index in indexies)
-            {
-                if (IsOpeningMarkupTag())
-                {
-                    
-                }
-            }
-            return result;
+            return CurrentMarkupRules
+                .SelectMany(e => e.ParseLineWithRule(s));
+            
         }
 
         private IEnumerable<(int, MarkupRule)> GetAllPotentialIndexiesOfMarkup(string s)

@@ -12,5 +12,6 @@ namespace Markdown.Rules
         public new string HtmlTag { get; } = "em";
         public new bool HaveClosingHtmlTag { get; } = true;
         public new bool HaveClosingMarkdownTag { get; } = true;
+        
     }
 }
