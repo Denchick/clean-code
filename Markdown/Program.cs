@@ -9,6 +9,7 @@ namespace Markdown
 {
 	class Program
 	{
+		//давай научимся принимать любой текст и выдывать Markdown
 		static void Main(string[] args)
 		{
 		}
