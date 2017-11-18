@@ -18,6 +18,8 @@ namespace Markdown
             var indexAndTagPairs = GetHtmlTagsOrderedByIndex(parsed);
             var offset = 0;
             var result = new StringBuilder(s);
+            
+            //можно сделать гораздо понятнее с заменой pair на ValueTuple
             foreach (var pair in indexAndTagPairs)
             {
                 var tag = GetHtmlTag(pair.Item2);
@@ -30,9 +32,10 @@ namespace Markdown
 
         private string GetHtmlTag(ToHtmlTag obj)
         {
+            //не используется
             var markupRule = CurrentMarkupRules
                 .First(e => e.HtmlTag == obj.TagName);
-            return obj.IsClosingTag ? $"<\\{obj.TagName}>" : $"<{obj.TagName}>";
+            return obj.IsClosingTag ? $@"<\{obj.TagName}>" : $"<{obj.TagName}>";
         }
 
         private static IEnumerable<(int, ToHtmlTag)> GetHtmlTagsOrderedByIndex(IEnumerable<ParsedSubline> parsed)

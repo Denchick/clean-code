@@ -4,8 +4,10 @@ using Markdown.MarkupRules;
 using Markdown.Rules;
 using NUnit.Framework;
 
+//тесты лучше хранить в отдельной директории
 namespace Markdown
 {
+    //не хватает тестов
     [TestFixture]
     public class Md_ShouldRender
     {

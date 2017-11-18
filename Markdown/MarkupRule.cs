@@ -9,32 +9,21 @@ namespace Markdown
 {
     public abstract class MarkupRule
     {
-        public string MarkdownTag { get; }
-        public string HtmlTag { get; }
-        public bool HaveClosingHtmlTag { get; }
-        public bool HaveClosingMarkdownTag { get; }
+        public abstract string MarkdownTag { get; }
+        public abstract string HtmlTag { get; }
+        protected abstract bool HaveClosingHtmlTag { get; }
+        protected abstract bool HaveClosingMarkdownTag { get; }
 
+        //абстрактный класс содержит всю логику парсинга, а наследники определяют его параметры. Напрашивается декомпозиция и выделение парсера  
         public IEnumerable<ParsedSubline> ParseLineWithRule(string s)
         {
             if (HaveClosingHtmlTag && HaveClosingMarkdownTag)
                 return ParseLineByRuleWhichHasClosingMarkupAndHtmlTags(s);
             
-            return new List<ParsedSubline>();
-        }
-        
-        protected bool IsMarkupTagEnd(string s, int i)
-        {
-            return i == s.Length - MarkdownTag.Length ||
-                   char.IsPunctuation(Convert.ToChar(s[i + MarkdownTag.Length])) ||
-                   char.IsWhiteSpace(Convert.ToChar(s[i + MarkdownTag.Length]));
+            return Enumerable.Empty<ParsedSubline>();
         }
 
-        protected static bool IsMarkupTagStart(string s, int i)
-        {
-            return i == 0 || char.IsPunctuation(Convert.ToChar(s[i - 1])) ||
-                   char.IsWhiteSpace(Convert.ToChar(s[i - 1]));
-        }
-        
+        //s - ни о чем не говорящее название
         private IEnumerable<ParsedSubline> ParseLineByRuleWhichHasClosingMarkupAndHtmlTags(string s)
         {
             var result = new List<ParsedSubline>();
@@ -42,12 +31,15 @@ namespace Markdown
             for (var i = 0; i < s.Length - MarkdownTag.Length; i++)
             {
                 if (s.Substring(i, MarkdownTag.Length) != MarkdownTag) continue;
-                
-                var subline = new ParsedSubline();
+
                 if (IsMarkupTagStart(s, i))
                 {
-                    subline.LeftBorderOfSubline = i;
-                    subline.MarkupRule = this;
+                    var subline = new ParsedSubline
+                    {
+                        LeftBorderOfSubline = i,
+                        // зачем тут this? внешнему миру пофиг на то, как правило парсится, ему важен только HtmlTag
+                        MarkupRule = this
+                    };
                     stack.Push(subline);
                 }
                 else if (IsMarkupTagEnd(s, i))
@@ -59,6 +51,21 @@ namespace Markdown
                 }           
             }
             return result;
+        }
+
+        private bool IsMarkupTagEnd(string s, int i)
+        {
+            return i == s.Length - MarkdownTag.Length
+                   || char.IsPunctuation(s[i + MarkdownTag.Length])
+                   || char.IsWhiteSpace(s[i + MarkdownTag.Length]);
+        }
+
+
+        private static bool IsMarkupTagStart(string s, int i)
+        {
+            return i == 0
+                   || char.IsPunctuation(s[i - 1])
+                   || char.IsWhiteSpace(s[i - 1]);
         }
     }
     
