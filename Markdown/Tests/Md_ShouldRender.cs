@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using Markdown.MarkupRules;
-using Markdown.Rules;
 using NUnit.Framework;
 
 //тесты лучше хранить в отдельной директории

@@ -17,19 +17,19 @@ namespace Markdown
 		public Md(IEnumerable<MarkupRule> rules)
 		{
 			CurrentMarkupRules = rules
-				.Where(e => e?.MarkdownTag != null)
-				.OrderBy(e => e.MarkdownTag.Length)
+				.Where(e => e?.MarkupTag != null)
+				.OrderBy(e => e.MarkupTag.Length)
 				.ToList();
 		}
 
 		public string RenderToHtml(string markdown)
 		{
 		    var result = new StringBuilder();
+			var parser = new TextParser(CurrentMarkupRules);
 			var render = new TextRender(CurrentMarkupRules);
 		    foreach (var s in markdown.Split('\n'))
 		    {
-		        var parsed = CurrentMarkupRules
-			        .SelectMany(e => e.ParseLineWithRule(s));
+			    var parsed = parser.PurseLine(s);
 		        var rendered = render.RenderLine(s, parsed);
 		        result.Append(rendered);
 		    }

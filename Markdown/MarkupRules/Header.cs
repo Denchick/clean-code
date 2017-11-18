@@ -1,28 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework.Constraints;
+﻿using System.Collections.Generic;
 
-namespace Markdown.Rules
+namespace Markdown.MarkupRules
 {
     internal class Header : MarkupRule
     {
-        public new string MarkdownTag { get; } = "#";
-        public new string HtmlTag { get; } = "h1";
-        public new bool HaveClosingHtmlTag { get; } = true;
-        public new bool HaveClosingMarkdownTag { get; } = false;
+        public override string MarkupTag { get; } = "#";
+        public override string HtmlTag { get; } = "h1";
         
-        public new IEnumerable<ParsedSubline> ParseLineWithRule(string s)
+        public override IEnumerable<ParsedSubline> ParseLine(string line)
         {
             var result = new List<ParsedSubline>();
-            if (s.StartsWith($"{MarkdownTag} "))
+            
+            if (line.StartsWith($"{MarkupTag} "))
                 result.Add(
                     new ParsedSubline()
                     {
                         LeftBorderOfSubline = 0, 
-                        RightBorderOfSubline = MarkdownTag.Length - 1, 
+                        RightBorderOfSubline = MarkupTag.Length - 1, 
                         MarkupRule = this
                     });
             return result;

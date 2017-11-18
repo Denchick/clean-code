@@ -54,15 +54,16 @@
   <ItemGroup>
     <Compile Include="MarkupRule.cs" />
     <Compile Include="Md.cs" />
-    <Compile Include="Md_ShouldRender.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="MarkupRules\Bold.cs" />
     <Compile Include="MarkupRules\Cursive.cs" />
     <Compile Include="MarkupRules\Header.cs" />
+    <Compile Include="Tests\Md_ShouldRender.cs" />
+    <Compile Include="TextParser.cs" />
     <Compile Include="TextRender.cs" />
     <Compile Include="Utils\ParsedSubline.cs" />
-    <Compile Include="Utils\StringExtension.cs" />
-    <Compile Include="Utils\ToHtmlTag.cs" />
+    <Compile Include="Utils\HtmlTag.cs" />
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

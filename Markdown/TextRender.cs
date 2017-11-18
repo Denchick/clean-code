@@ -19,11 +19,10 @@ namespace Markdown
             var offset = 0;
             var result = new StringBuilder(s);
             
-            //можно сделать гораздо понятнее с заменой pair на ValueTuple
-            foreach (var pair in indexAndTagPairs)
+            foreach (var valueTuple in indexAndTagPairs)
             {
-                var tag = GetHtmlTag(pair.Item2);
-                result.Insert(pair.Item1 + offset, tag);
+                var tag = GetHtmlTag(valueTuple.Item2);
+                result.Insert(valueTuple.Item1 + offset, tag);
                 offset += tag.Length;
             }
             return result.ToString();
@@ -32,7 +31,6 @@ namespace Markdown
 
         private string GetHtmlTag(ToHtmlTag obj)
         {
-            //не используется
             var markupRule = CurrentMarkupRules
                 .First(e => e.HtmlTag == obj.TagName);
             return obj.IsClosingTag ? $@"<\{obj.TagName}>" : $"<{obj.TagName}>";
