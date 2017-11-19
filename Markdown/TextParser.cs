@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using Markdown.Parsers;
 using NUnit.Framework;
 
@@ -10,20 +12,23 @@ namespace Markdown
         private List<IMarkupRule> CurrentMarkupRules { get; }
         public TextParser(List<IMarkupRule> rules)
         {
-            CurrentMarkupRules = rules;
+            CurrentMarkupRules = rules
+                .OrderByDescending(e => e.MarkupTag.Length)
+                .ToList();
         }
 
         public IEnumerable<ParsedSubline> ParseLine(string line)
         {
             var result = new List<ParsedSubline>();
-            var singleTagsParser = new SingleMarkupTagsParser();
-            var pairTagsParser = new PairedMarkupTagParser();
+            if (line is null) return result;
 
-            foreach (var currentMarkupRule in CurrentMarkupRules)
-                result.AddRange(currentMarkupRule.HaveClosingMarkupTag
-                    ? pairTagsParser.ParseLine(line, currentMarkupRule.MarkupTag)
-                    : singleTagsParser.ParseLine(line, currentMarkupRule.MarkupTag));
+            var currentLine = line;
+            var singleTagsParser = new SingleMarkupTagsParser(CurrentMarkupRules);
+            var pairTagsParser = new PairedMarkupTagParser(CurrentMarkupRules);
 
+            result.AddRange(singleTagsParser.ParseLine(line));
+            result.AddRange(pairTagsParser.ParseLine(line));
+            
             return result;
         }
     }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Markdown.MarkupRules;
 
 namespace Markdown
 {
@@ -15,6 +17,11 @@ namespace Markdown
         {
             return index == 0 || char.IsPunctuation(Convert.ToChar(line[index - 1])) ||
                    char.IsWhiteSpace(Convert.ToChar(line[index - 1]));
+        }
+
+        public static List<IMarkupRule> GetAllAvalableRules()
+        {
+            return new List<IMarkupRule>() { new Bold(), new Cursive(), new Header() };
         }
     }
 }

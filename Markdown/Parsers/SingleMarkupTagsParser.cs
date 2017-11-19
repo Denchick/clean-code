@@ -1,23 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Markdown.MarkupRules;
 
 namespace Markdown.Parsers
 {
     public class SingleMarkupTagsParser : IMarkupTagsParser
     {
-        public IEnumerable<ParsedSubline> ParseLine(string line, string markupTag)
+        private List<IMarkupRule> CurrentMarkupRules { get; }
+
+        public SingleMarkupTagsParser(List<IMarkupRule> currentMarkupRules)
         {
-            var result = new List<ParsedSubline>();
-            
-            if (line.StartsWith($"{markupTag} "))
-                result.Add(
-                    new ParsedSubline()
-                    {
-                        LeftBorderOfSubline = 0, 
-                        RightBorderOfSubline = markupTag.Length - 1
-                    });
-            return result;
+            CurrentMarkupRules = currentMarkupRules
+                .Where(e => !e.HaveClosingMarkupTag)
+                .OrderByDescending(e => e.MarkupTag.Length)
+                .ToList();;
         }
 
+        public IEnumerable<ParsedSubline> ParseLine(string line)
+        {
+            foreach (var currentMarkupRule in CurrentMarkupRules)
+            {
+                if (line.StartsWith($"{currentMarkupRule.MarkupTag} "))
+                    return new List<ParsedSubline>()
+                    {
+                        new ParsedSubline()
+                        {
+                            LeftBorderOfSubline = 0,
+                            RightBorderOfSubline = line.Length,
+                            MarkupRule = currentMarkupRule
+                        }
+                    };
+            }
+            return new List<ParsedSubline>();
+        }
     }
 }

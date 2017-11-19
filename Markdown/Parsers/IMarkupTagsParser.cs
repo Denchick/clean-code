@@ -4,6 +4,6 @@ namespace Markdown.MarkupRules
 {
     public interface IMarkupTagsParser
     {
-        IEnumerable<ParsedSubline> ParseLine(string line, string markupTag);
+        IEnumerable<ParsedSubline> ParseLine(string line);
     }
 }
