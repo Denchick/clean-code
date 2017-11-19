@@ -63,6 +63,7 @@
     <Compile Include="MarkupRules\Header.cs" />
     <Compile Include="Tests\Md_ShouldRender.cs" />
     <Compile Include="Tests\TextParser_Should.cs" />
+    <Compile Include="Tests\TextRender_Should.cs" />
     <Compile Include="TextParser.cs" />
     <Compile Include="TextRender.cs" />
     <Compile Include="Utils\ParsedSubline.cs" />

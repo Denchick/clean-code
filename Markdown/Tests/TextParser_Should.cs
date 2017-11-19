@@ -21,7 +21,7 @@ namespace Markdown
         [TestCase("just simple text", TestName = "when line is some words separated by spacies")]
         public void CorrectParsing_WhenNothingToParse(string line)
         {
-            var rules = Utils.GetAllAvalableRules();
+            var rules = Utils.GetAllAvailableRules();
             
             var parser = new TextParser(rules);
             var result = parser.ParseLine(line);
@@ -33,12 +33,12 @@ namespace Markdown
         [TestCase("__kek__", "__", 0, 5)]
         [TestCase("___kek__", "__", 0, 6)]
         [TestCase("__kek___", "__", 0, 5)]
-        [TestCase("# kek", "#", 0, 5)]
+        [TestCase("#kek", "#", 0, 4)]
         public void CorrectParsing_WhenOneTagInLine(string line, string markupTag, int leftParsedIndex, int rightParsedIndex)
         {
-            var parser = new TextParser(Utils.GetAllAvalableRules());
+            var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
-            var rule = Utils.GetAllAvalableRules()
+            var rule = Utils.GetAllAvailableRules()
                 .First(e => e.MarkupTag == markupTag);
 
             var expected = new ParsedSubline()
@@ -55,7 +55,7 @@ namespace Markdown
         public void CorrectParsing_WhenFewTagsInLine()
         {
             var line = "_a_ __b__";
-            var parser = new TextParser(Utils.GetAllAvalableRules());
+            var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
 
             var cursiveTag = new ParsedSubline()
@@ -78,8 +78,8 @@ namespace Markdown
         [Test]
         public void CorrectParsing_WhenNestingTagsInLine()
         {
-            var line = "# _a_";
-            var parser = new TextParser(Utils.GetAllAvalableRules());
+            var line = "#_a_";
+            var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
 
             var headerTag = new ParsedSubline()
@@ -90,8 +90,8 @@ namespace Markdown
             };
             var boldTag = new ParsedSubline()
             {
-                LeftBorderOfSubline = 2,
-                RightBorderOfSubline = 4,
+                LeftBorderOfSubline = 1,
+                RightBorderOfSubline = 3,
                 MarkupRule = new Cursive()
             };
             

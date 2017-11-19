@@ -21,7 +21,7 @@ namespace Markdown
         [TestCase("kek#")]
         public void CorrectMarkup_WhenNothingToMarkUp(string s)
         {
-            var rules = Utils.GetAllAvalableRules();
+            var rules = Utils.GetAllAvailableRules();
             
             var md = new Md(rules);
 

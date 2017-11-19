@@ -19,7 +19,7 @@ namespace Markdown
                    char.IsWhiteSpace(Convert.ToChar(line[index - 1]));
         }
 
-        public static List<IMarkupRule> GetAllAvalableRules()
+        public static List<IMarkupRule> GetAllAvailableRules()
         {
             return new List<IMarkupRule>() { new Bold(), new Cursive(), new Header() };
         }

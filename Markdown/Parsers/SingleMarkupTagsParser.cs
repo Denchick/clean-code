@@ -20,7 +20,7 @@ namespace Markdown.Parsers
         {
             foreach (var currentMarkupRule in CurrentMarkupRules)
             {
-                if (line.StartsWith($"{currentMarkupRule.MarkupTag} "))
+                if (line.StartsWith(currentMarkupRule.MarkupTag))
                     return new List<ParsedSubline>()
                     {
                         new ParsedSubline()
