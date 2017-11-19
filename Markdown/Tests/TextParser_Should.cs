@@ -41,12 +41,7 @@ namespace Markdown
             var rule = Utils.GetAllAvailableRules()
                 .First(e => e.MarkupTag == markupTag);
 
-            var expected = new ParsedSubline()
-            {
-                LeftBorderOfSubline = leftParsedIndex,
-                RightBorderOfSubline = rightParsedIndex,
-                MarkupRule = rule
-            };
+            var expected = new ParsedSubline(leftParsedIndex, rightParsedIndex, rule);
             result.Should().HaveCount(1);
             result.First().Should().BeEquivalentTo(expected);
         }
@@ -55,22 +50,12 @@ namespace Markdown
         public void CorrectParsing_WhenFewTagsInLine()
         {
             var line = "_a_ __b__";
+            
             var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
 
-            var cursiveTag = new ParsedSubline()
-            {
-                LeftBorderOfSubline = 0,
-                RightBorderOfSubline = 2,
-                MarkupRule = new Cursive()
-            };
-            var boldTag = new ParsedSubline()
-            {
-                LeftBorderOfSubline = 4,
-                RightBorderOfSubline = 7,
-                MarkupRule = new Bold()
-            };
-            
+            var cursiveTag = new ParsedSubline(0, 2, new Cursive());
+            var boldTag = new ParsedSubline(4, 7, new Bold());
             var expected = new List<ParsedSubline>() { cursiveTag, boldTag };
             result.Should().BeEquivalentTo(expected);
         }
@@ -79,22 +64,12 @@ namespace Markdown
         public void CorrectParsing_WhenNestingTagsInLine()
         {
             var line = "#_a_";
+            
             var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
 
-            var headerTag = new ParsedSubline()
-            {
-                LeftBorderOfSubline = 0,
-                RightBorderOfSubline = line.Length,
-                MarkupRule = new Header()
-            };
-            var boldTag = new ParsedSubline()
-            {
-                LeftBorderOfSubline = 1,
-                RightBorderOfSubline = 3,
-                MarkupRule = new Cursive()
-            };
-            
+            var headerTag = new ParsedSubline(0, line.Length, new Header());
+            var boldTag = new ParsedSubline(1, 3, new Cursive());
             var expected = new List<ParsedSubline>() { headerTag, boldTag };
             result.Should().BeEquivalentTo(expected);
         }

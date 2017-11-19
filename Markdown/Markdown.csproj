@@ -67,7 +67,7 @@
     <Compile Include="TextParser.cs" />
     <Compile Include="TextRender.cs" />
     <Compile Include="Utils\ParsedSubline.cs" />
-    <Compile Include="Utils\HtmlTag.cs" />
+    <Compile Include="Utils\FromMarkupTagToHtml.cs" />
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>

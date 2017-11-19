@@ -6,6 +6,8 @@ namespace Markdown.Parsers
 {
     public class PairedMarkupTagParser : IMarkupTagsParser
     {
+        private List<IMarkupRule> CurrentMarkupRules { get; }
+
         public PairedMarkupTagParser(List<IMarkupRule> currentMarkupRules)
         {
             CurrentMarkupRules = currentMarkupRules
@@ -14,34 +16,25 @@ namespace Markdown.Parsers
                 .ToList();
         }
 
-        private List<IMarkupRule> CurrentMarkupRules { get; }
-
         public IEnumerable<ParsedSubline> ParseLine(string line)
         {
             var result = new List<ParsedSubline>();
-            var stack = new Stack<ParsedSubline>();
-            for (var i = 0; i < line.Length; i++)
+            var stackOfOpenedTags = new Stack<ParsedSubline>();
+            for (var index = 0; index < line.Length; index++)
             {
-                var rule = DetermineRule(line, i);
+                var rule = DetermineRuleOfSubline(line, index);
                 if (rule == null) continue;
 
-                if (Utils.CanBeOpenningTag(line, i))
+                if (Utils.CanBeOpenningTag(line, index))
+                    stackOfOpenedTags.Push(new ParsedSubline(index, rule));
+                else if (Utils.CanBeClosingTag(line, index, rule.MarkupTag.Length))
                 {
-                    var subline = new ParsedSubline
-                    {
-                        LeftBorderOfSubline = i,
-                        MarkupRule = rule
-                    };
-                    stack.Push(subline);
-                }
-                else if (Utils.CanBeClosingTag(line, i, rule.MarkupTag.Length))
-                {
-                    var element = GetClosingElement(stack, rule);
+                    var element = GetClosingElement(stackOfOpenedTags, rule);
                     if (element == null) continue;
-                    element.RightBorderOfSubline = i;
+                    element.RightBorderOfSubline = index;
                     result.Add(element);
                 }
-                i += rule.MarkupTag.Length - 1;
+                index += rule.MarkupTag.Length - 1;
             }
             return result;
         }
@@ -57,7 +50,7 @@ namespace Markdown.Parsers
             return null;
         }
 
-        private IMarkupRule DetermineRule(string line, int i)
+        private IMarkupRule DetermineRuleOfSubline(string line, int i)
         {
 
             return CurrentMarkupRules

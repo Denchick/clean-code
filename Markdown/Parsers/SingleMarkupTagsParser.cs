@@ -23,12 +23,7 @@ namespace Markdown.Parsers
                 if (line.StartsWith(currentMarkupRule.MarkupTag))
                     return new List<ParsedSubline>()
                     {
-                        new ParsedSubline()
-                        {
-                            LeftBorderOfSubline = 0,
-                            RightBorderOfSubline = line.Length,
-                            MarkupRule = currentMarkupRule
-                        }
+                        new ParsedSubline(0, line.Length, currentMarkupRule)
                     };
             }
             return new List<ParsedSubline>();
