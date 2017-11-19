@@ -31,7 +31,7 @@ namespace Markdown
 		    {
 			    var parsed = parser.ParseLine(s);
 		        var rendered = render.RenderLine(s, parsed);
-		        result.Append(rendered);
+		        result.Append($"<p>{rendered}</p>");
 		    }
 		    return result.ToString();
 		}
