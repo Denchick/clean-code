@@ -6,9 +6,9 @@ namespace Markdown
 {
     public class TextRender
     {
-        private List<MarkupRule> CurrentMarkupRules { get; }
+        private List<IMarkupRule> CurrentMarkupRules { get; }
 
-        public TextRender(List<MarkupRule> rules)
+        public TextRender(List<IMarkupRule> rules)
         {
             CurrentMarkupRules = rules;
         }
@@ -26,7 +26,6 @@ namespace Markdown
                 offset += tag.Length;
             }
             return result.ToString();
-
         }
 
         private string GetHtmlTag(ToHtmlTag obj)

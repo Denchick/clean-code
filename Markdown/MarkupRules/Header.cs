@@ -2,25 +2,11 @@
 
 namespace Markdown.MarkupRules
 {
-    internal class Header : MarkupRule
+    internal class Header : IMarkupRule
     {
-        public override string MarkupTag { get; } = "#";
-        public override string HtmlTag { get; } = "h1";
-        
-        public override IEnumerable<ParsedSubline> ParseLine(string line)
-        {
-            var result = new List<ParsedSubline>();
-            
-            if (line.StartsWith($"{MarkupTag} "))
-                result.Add(
-                    new ParsedSubline()
-                    {
-                        LeftBorderOfSubline = 0, 
-                        RightBorderOfSubline = MarkupTag.Length - 1, 
-                        MarkupRule = this
-                    });
-            return result;
-        }
-        
+        public string MarkupTag { get; } = "#";
+        public string HtmlTag { get; } = "h1";
+        public bool HaveClosingMarkupTag { get; } = false;
+        public bool HaveClosingHtmlTag { get; } = true;        
     }
 }

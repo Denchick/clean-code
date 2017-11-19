@@ -12,9 +12,9 @@ namespace Markdown
 {
 	public class Md
 	{
-		private List<MarkupRule> CurrentMarkupRules { get; }
+		private List<IMarkupRule> CurrentMarkupRules { get; }
 			
-		public Md(IEnumerable<MarkupRule> rules)
+		public Md(IEnumerable<IMarkupRule> rules)
 		{
 			CurrentMarkupRules = rules
 				.Where(e => e?.MarkupTag != null)
@@ -29,7 +29,7 @@ namespace Markdown
 			var render = new TextRender(CurrentMarkupRules);
 		    foreach (var s in markdown.Split('\n'))
 		    {
-			    var parsed = parser.PurseLine(s);
+			    var parsed = parser.ParseLine(s);
 		        var rendered = render.RenderLine(s, parsed);
 		        result.Append(rendered);
 		    }

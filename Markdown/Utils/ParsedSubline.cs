@@ -10,7 +10,7 @@ namespace Markdown
     {
         public int LeftBorderOfSubline { get; set; }
         public int RightBorderOfSubline { get; set; }
-        public MarkupRule MarkupRule { get; set; }
+        public IMarkupRule MarkupRule { get; set; }
     }
 
 }
