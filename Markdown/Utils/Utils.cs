@@ -21,7 +21,7 @@ namespace Markdown
 
         public static List<IMarkupRule> GetAllAvailableRules()
         {
-            return new List<IMarkupRule>() { new Bold(), new Cursive(), new Header() };
+            return new List<IMarkupRule>() { new Bold(), new Cursive(), new Header(), new Paragraph() };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Markdown.MarkupRules;
 
 namespace Markdown.Parsers
@@ -8,12 +9,12 @@ namespace Markdown.Parsers
     {
         private List<IMarkupRule> CurrentMarkupRules { get; }
 
-        public SingleMarkupTagsParser(List<IMarkupRule> currentMarkupRules)
+        public SingleMarkupTagsParser(IEnumerable<IMarkupRule> currentMarkupRules)
         {
             CurrentMarkupRules = currentMarkupRules
-                .Where(e => !e.HaveClosingMarkupTag)
+                .Where(e => !e.HaveClosingMarkupTag && !(e is Paragraph))
                 .OrderByDescending(e => e.MarkupTag.Length)
-                .ToList();;
+                .ToList();
         }
 
         public IEnumerable<ParsedSubline> ParseLine(string line)
@@ -21,10 +22,13 @@ namespace Markdown.Parsers
             foreach (var currentMarkupRule in CurrentMarkupRules)
             {
                 if (line.StartsWith(currentMarkupRule.MarkupTag))
+                {
                     return new List<ParsedSubline>()
                     {
                         new ParsedSubline(0, line.Length, currentMarkupRule)
                     };
+
+                }
             }
             return new List<ParsedSubline>();
         }

@@ -10,7 +10,7 @@ namespace Markdown
     public class TextParser
     {
         private List<IMarkupRule> CurrentMarkupRules { get; }
-        public TextParser(List<IMarkupRule> rules)
+        public TextParser(IEnumerable<IMarkupRule> rules)
         {
             CurrentMarkupRules = rules
                 .OrderByDescending(e => e.MarkupTag.Length)
@@ -25,9 +25,11 @@ namespace Markdown
             var currentLine = line;
             var singleTagsParser = new SingleMarkupTagsParser(CurrentMarkupRules);
             var pairTagsParser = new PairedMarkupTagParser(CurrentMarkupRules);
-
+            var paragraphsParser = new ParagraphTagsParser(CurrentMarkupRules);
+            
             result.AddRange(singleTagsParser.ParseLine(line));
             result.AddRange(pairTagsParser.ParseLine(line));
+            result.AddRange(paragraphsParser.ParseLine(line));
             
             return result;
         }

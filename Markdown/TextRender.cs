@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static System.ValueTuple;
 
 namespace Markdown
 {
@@ -19,15 +21,16 @@ namespace Markdown
             var offsetAfterReplacingTags = 0;
             var result = new StringBuilder(line);
             
-            foreach (var valueTuple in indexAndTagValueTuples)
+            foreach (var (index, fromMarkupTagToHtml) in indexAndTagValueTuples)
             {
-                var tag = GetHtmlTagFromMarkup(valueTuple.Item2);
-                if (valueTuple.Item1 == line.Length)
+                var tag = GetHtmlTagFromMarkup(fromMarkupTagToHtml);
+                    
+                if (index == line.Length)
                     result.Append(tag);
                 else
                 {
-                    var startIndex = valueTuple.Item1 + offsetAfterReplacingTags;
-                    var markupTagLenght = valueTuple.Item2.LenghtOfReplacedMarkupTag;
+                    var startIndex = Math.Max(index + offsetAfterReplacingTags, 0);
+                    var markupTagLenght = fromMarkupTagToHtml.LenghtOfReplacedMarkupTag;
                     
                     result.Remove(startIndex, markupTagLenght);
                     result.Insert(startIndex, tag);
@@ -40,7 +43,7 @@ namespace Markdown
         private string GetHtmlTagFromMarkup(FromMarkupTagToHtml obj)
         {
             var markupRule = CurrentMarkupRules
-                .First(e => e.HtmlTag == obj.TagName);
+                .FirstOrDefault(e => e.HtmlTag == obj.TagName);
             return obj.IsClosingHtmlTag ? $@"</{obj.TagName}>" : $"<{obj.TagName}>";
         }
 

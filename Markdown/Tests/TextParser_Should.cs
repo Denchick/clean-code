@@ -10,7 +10,6 @@ namespace Markdown
     [TestFixture]
     public class TextParser_Should
     {
-        [TestCase(null, TestName = "when line is null")]
         [TestCase("", TestName = "when line is empty")]
         [TestCase(" ", TestName = "when line is whitespace")]
         [TestCase("kek", TestName = "when line is just one word")]
@@ -25,27 +24,48 @@ namespace Markdown
             
             var parser = new TextParser(rules);
             var result = parser.ParseLine(line);
-            
-            result.Should().HaveCount(0);
+
+            var expected = new List<ParsedSubline>()
+            {
+                new ParsedSubline(-1, line.Length, new Paragraph())
+            };
+            result.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("_kek_", "_", 0, 4)]
         [TestCase("__kek__", "__", 0, 5)]
         [TestCase("___kek__", "__", 0, 6)]
         [TestCase("__kek___", "__", 0, 5)]
-        [TestCase("#kek", "#", 0, 4)]
-        public void CorrectParsing_WhenOneTagInLine(string line, string markupTag, int leftParsedIndex, int rightParsedIndex)
+        public void CorrectParsing_WhenOnePairedMarkupTagInLine(string line, string markupTag, int leftParsedIndex, int rightParsedIndex)
         {
             var parser = new TextParser(Utils.GetAllAvailableRules());
             var result = parser.ParseLine(line);
-            var rule = Utils.GetAllAvailableRules()
-                .First(e => e.MarkupTag == markupTag);
 
-            var expected = new ParsedSubline(leftParsedIndex, rightParsedIndex, rule);
-            result.Should().HaveCount(1);
-            result.First().Should().BeEquivalentTo(expected);
+            var expected = new List<ParsedSubline>()
+            {
+                new ParsedSubline(-1, line.Length, Utils.GetAllAvailableRules()
+                    .First(e => e.HtmlTag == "p")),
+                new ParsedSubline(leftParsedIndex, rightParsedIndex, Utils.GetAllAvailableRules()
+                    .First(e => e.MarkupTag == markupTag))
+            };
+            result.Should().BeEquivalentTo(expected);
         }
 
+        [TestCase("#kek", "#", 0, 4)]
+        [TestCase("# kek", "#", 0, 5)]
+        public void CorrectParsing_WhenOneSingleMarkupTagInLine(string line, string markupTag, int leftParsedIndex, int rightParsedIndex)
+        {
+            var parser = new TextParser(Utils.GetAllAvailableRules());
+            var result = parser.ParseLine(line);
+
+            var expected = new List<ParsedSubline>()
+            {
+                new ParsedSubline(leftParsedIndex, rightParsedIndex, Utils.GetAllAvailableRules()
+                    .First(e => e.MarkupTag == markupTag))
+            };
+            result.Should().BeEquivalentTo(expected);
+        }
+        
         [Test]
         public void CorrectParsing_WhenFewTagsInLine()
         {
@@ -56,7 +76,8 @@ namespace Markdown
 
             var cursiveTag = new ParsedSubline(0, 2, new Cursive());
             var boldTag = new ParsedSubline(4, 7, new Bold());
-            var expected = new List<ParsedSubline>() { cursiveTag, boldTag };
+            var paragraphTag = new ParsedSubline(-1, line.Length, new Paragraph());
+            var expected = new List<ParsedSubline>() { cursiveTag, boldTag, paragraphTag };
             result.Should().BeEquivalentTo(expected);
         }
 

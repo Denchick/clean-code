@@ -27,11 +27,11 @@ namespace Markdown
 		    var result = new StringBuilder();
 			var parser = new TextParser(CurrentMarkupRules);
 			var render = new TextRender(CurrentMarkupRules);
-		    foreach (var s in markdown.Split('\n'))
+		    foreach (var s in markdown.Split(new char[] {'\n'}, StringSplitOptions.RemoveEmptyEntries))
 		    {
 			    var parsed = parser.ParseLine(s);
 		        var rendered = render.RenderLine(s, parsed);
-		        result.Append($"<p>{rendered}</p>");
+		        result.Append($"{rendered}\n");
 		    }
 		    return result.ToString();
 		}

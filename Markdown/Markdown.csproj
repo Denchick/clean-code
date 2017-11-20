@@ -53,9 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MarkupRules\IMarkupRule.cs" />
+    <Compile Include="MarkupRules\Paragraph.cs" />
     <Compile Include="Md.cs" />
     <Compile Include="Parsers\IMarkupTagsParser.cs" />
     <Compile Include="Parsers\PairedMarkupTagParser.cs" />
+    <Compile Include="Parsers\ParagraphTagsParser.cs" />
     <Compile Include="Parsers\SingleMarkupTagsParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="MarkupRules\Bold.cs" />
