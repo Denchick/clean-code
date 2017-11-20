@@ -30,6 +30,7 @@ namespace Markdown
                 else
                 {
                     var startIndex = Math.Max(index + offsetAfterReplacingTags, 0);
+                    
                     var markupTagLenght = fromMarkupTagToHtml.LenghtOfReplacedMarkupTag;
                     
                     result.Remove(startIndex, markupTagLenght);

@@ -27,13 +27,27 @@ namespace Markdown
 		    var result = new StringBuilder();
 			var parser = new TextParser(CurrentMarkupRules);
 			var render = new TextRender(CurrentMarkupRules);
-		    foreach (var s in markdown.Split(new char[] {'\n'}, StringSplitOptions.RemoveEmptyEntries))
+		    foreach (var line in markdown.Split(new string[] {"\n\n"}, StringSplitOptions.RemoveEmptyEntries))
 		    {
-			    var parsed = parser.ParseLine(s);
-		        var rendered = render.RenderLine(s, parsed);
+			    var newLine = EscapeSpecialSymbols(line);
+			    var parsed = parser.ParseLine(newLine);
+		        var rendered = render.RenderLine(newLine, parsed);
 		        result.Append($"{rendered}\n");
 		    }
 		    return result.ToString();
+		}
+
+		public string EscapeSpecialSymbols(string line)
+		{
+			var symbols = new List<char>() {'<', '>'};
+			var result = new StringBuilder(line);
+			for (var i = 0; i < result.Length; i++)
+			{
+				if (!symbols.Contains(result[i])) continue;
+				result.Insert(i, "/");
+				i += 1;
+			}
+			return result.ToString();
 		}
 
 	}

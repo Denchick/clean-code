@@ -24,7 +24,7 @@ namespace Markdown
             
             var md = new Md(rules);
 
-            md.RenderToHtml(s).Should().Be($"<p>{s}</p>");
+            md.RenderToHtml(s).Contains($"<p>{s}</p>");
         }
     }
 }

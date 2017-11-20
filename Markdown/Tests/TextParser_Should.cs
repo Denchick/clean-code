@@ -36,6 +36,7 @@ namespace Markdown
         [TestCase("__kek__", "__", 0, 5)]
         [TestCase("___kek__", "__", 0, 6)]
         [TestCase("__kek___", "__", 0, 5)]
+        [TestCase("_a\nb_", "_", 0, 4)]
         public void CorrectParsing_WhenOnePairedMarkupTagInLine(string line, string markupTag, int leftParsedIndex, int rightParsedIndex)
         {
             var parser = new TextParser(Utils.GetAllAvailableRules());
